@@ -159,7 +159,7 @@ Host thoreau.via.johnston
 User burt
 Hostname 172.19.0.26
 IdentityFile ~/.ssh/id_rsa_thoreau
-ProxyJump armistead
+ProxyJump johston
 
 Host johnston
 User burt
