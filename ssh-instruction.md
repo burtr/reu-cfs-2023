@@ -1,4 +1,4 @@
-## Public Key Cryptograhy
+## Public Key Cryptography
 
 
 Public key cryptography was announced to the civilian world in 1976 in the paper "New Directions in Cryptography" by Whitfield Diffie and Martin E. Hellman. This was followed on 1977 by the paper
