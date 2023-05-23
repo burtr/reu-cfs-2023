@@ -1,4 +1,4 @@
-### SSH Public Key
+## Public Key Cryptograhy
 
 The ssh protocol assures confidentially by establishing an encrypted channel between your lap and the server
 using public key cryptography. 
