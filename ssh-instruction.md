@@ -91,7 +91,7 @@ are the details of how to log in with a public key.
 
 You should have logged in without any password prompts.
 
-#### The config file
+## The config file
 
 There are three pieces of information in the ssh login line:
 
