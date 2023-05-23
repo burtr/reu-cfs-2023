@@ -1,80 +1,153 @@
-### SSH Public Key
+## Public Key Cryptograhy
 
-Your Cane ID is your name you received at the Cane ID website. To manage or reset your password, visit https://caneidhelp.miami.edu/caneid/.
 
-We refer to the password you used to create this account, as the Cane ID password. You have recieved other passwords for other machines,
-such as the lab machines and for Pegasus. 
+Public key cryptography was announced to the civilian world in 1976 in the paper "New Directions in Cryptography" by Whitfield Diffie and Martin E. Hellman. This was followed on 1977 by the paper
+"A Method for Obtaining Digital Signatures and Public-Key Cryptosystems" by Ron Rivest, Adi Shamir, and Leonard Adleman, which proposed the
+first known public key cryptosystem. I say "known" and "civilian" because it later became known that Clifford Cocks, a mathematician working for GCHQ had the idea in 1973, but it remained classified.
 
-To help alleiviate the burden of passwords and other troublesome identifiers, as well as to enhance security, public key authentication is preferred
-for ssh. It requires you create a public/private key pair using the command line program `ssh-keygen`. You can use it without parameters.
-It will prompt for the name of the file to create. I suggesst `id_rsa_thoreau`, although this is not critical. 
+Ordinary crytosystems use a single key for encryption and decryption, and the idea is the two parties somehow share this key in a 
+secure manner. Public key has two keys, one for encryption and the other for decryption. The decryption key is kept secret but
+the encryption key is made public. Therefore what is shared is the public key, and it can be done over a public channel.
 
-The program will create two files: `id_rsa_thoreau` and `id_rsa_thoreau.pub`. The first contains the private key and <u>must</u> be kept secret.
-The .pub file is the public key and you can share that freely. 
+## SSH
 
-__public key in a nutshell__
+Ssh is a terminal communication application that uses the SSL protocol to assure confidentially by using public key cryptography
+to establish an encrypted channel between your lap and the server 
 
-The public key system will be a conversation between the public key holder and 
-the private key holder during which the public key holder becomes convinced that the counter-party  knows the contents of the private key. 
-However, this conversation reveals nothing about the private key to any party, not to an eavesdropper not even to the holder of the public key.
+The server has a private key, public key pair.
+- When contacted by the client, it will handover its public key. 
+- The client chooses a random key, encrypts it using the public key and sends it to the server.
+- The server decrypts it. 
+- Sharing a random key, the client and server use it to encrypt their further communication.
+- Inside this encrypted channel, an standard username/password login is performed.
 
-__Part 1__
+More details can be found in my [ssl tutorial](https://www.cs.miami.edu/home/burt/learning/Csc424.162/workbook/ssl-tutorial.html).
 
-My suggestion is that you create the key pair on thoreau, and you must do so in the directory `~/.ssh`.
+### Server authentication
 
-1. logon onto triton. use your cane id and your cane id password
-2. `mkdir .ssh`
+Because you are giving your password over to the server, it is desirable that you trust the server. However, this is nothing 
+in this protocol that assures you that the server you believe you are connecting to is the server you are connecting to. 
+It would be better if you already had the public key, from a reliable source, rather than just accepting the public key on 
+faith, given by the server. 
+
+This is hard problem to solve, and mostly ssh solves it by a method called _key continuity_. What this mean is that when the 
+server presents you its public key, you are warned and asked to accept the risk that the public key is in authentic. If you 
+accept it, the key is memorized, and future connections are compared against the key. If they server key changes, and it is
+a legitimate change, you will have to ask your machine to forget the old public key, and accept a new one.
+
+### User authentication
+
+So far, we have possibly authenticated the server, constructed an encryption channel, and passed our password over that channel.
+But we can do better. We can also use public key cryptography to eleminate password authentication, and replace it with public
+key (user) authentication.
+
+You will create a public key, private key pair. You will share the public key with the server, and keep the private key private.
+The channel established as before, the server will challenge you on your knowledge of the private key by encrypting something
+withe public key, and seeing if you can decrypt it. 
+
+This is better in a lot of ways. For us, the most obvious advantage is no more typing of passwords.
+
+## SSH Step by Step
+
+You will create a public key/private key pair using the program `ssh-keygen`.
+The program will create two files. The first contains the private key and <u>must</u> be kept secret.
+The second file as the same name but with .pub at the end. This is the public key and you will share that with 
+the machine you want to log into.
+
+The hidden directory `.ssh` contains keys and an `authorized_keys` file. The `authorized_keys` file is full of
+the .pub keys of legitimate users. If a user has a matching private key for any of those public keys, the login succeeds.
+
+The private keys by convention are stores in the `.ssh` directory, and must have read permission _only_ by user. The ssh
+program will not proceed if this security requirement is not met.
+
+<pre>
+  CLIENT                     SERVER
+  chmod go-r .ssh/id_rsa     cat id_rsa.pub >> .ssh/authorized_keys 
+  .ssh/id_rsa                .ssh/authorized_keys
+</pre>
+
+We have johnston.cs.miami.edu open for ssh to the internet. You can login using your username/password. Here
+are the details of how to log in with a public key.
+
+##### On johnston
+
+1. ssh to johnston.cs.miami.edu using your userid and password
+2. `mkdir .ssh` # not needed if `~/.ssh` already exists
 3. `cd .ssh`
-4. `ssh-keygen` (at the prompt: `id_rsa_thoreau`, and the pass phrase prompt, just return (no pass phrase), and confirm return)
-5. `cat id_rsa_thoreau >> authorized_keys`
+4. `ssh-keygen -b 4096` 
+5. `cat id_rsa >> authorized_keys`
 6. logout
 
-Now transfer `id_rsa_thoreau` onto you laptop/friendly home machine.
+##### On your machine
 
 1. `cd` (to make sure you are in your home directory)
-2. `mkdir .ssh` (not needed if `~/.ssh` already exists)
+2. `mkdir .ssh` # not needed if `~/.ssh` already exists
 3. `cd .ssh`
-4. `scp _caneid_@thoreau.cs.miami.edu:~/.ssh/id_rsa_thoreau .` (and use your cane id password to authenticate; don't forget the dot at the end of the line)
-5. `chmod go-rw id_rsa_thoreau`
-6. `ssh -i id_rsa_thoreau _caneid_@thoreau.cs.miami.edu`
+4. use `scp` to copy `.ssh/id_rsa` from johnston to your machine
+5. thatis: `scp -username-@johnston.cs.miami.edu:~/.ssh/id_rsa .` # will prompt for your password
+6. `chmod go-rw id_rsa` # ssh will not work if keys are not protected. it's nanny-ware
+7. now log in using the `-i` option to select the private key, 
+8. `ssh -i id_rsa -username-@johnston.cs.miami.edu`
 
-You should have logged in without any password prompts. If this did not happen, fix the situtation.
+You should have logged in without any password prompts.
 
-__Part 2__
+## The config file
 
 There are three pieces of information in the ssh login line:
 
-1. your cane id
-2. the host name thoreau.ccs.miami.edu
-3. the file name id_rsa_thoreau
+1. your username
+2. the host name johnston.miami.edu
+3. the file name id_rsa
 
-Theses things can be written into the `~/.ssh/config` file and given a single name, thoreau, and then you can
-log into triton with just the command `ssh thoreau`.
+Theses things can be written into the `~/.ssh/config` file and given a single tag, say `johnston`, and 
+then the ssh becomes simply `ssh johnston`. Ssh alwas looks in `~/.ssh/config` for options and adds
+them automatically to your login attempt
 
-On your laptop/friendly machine, where you have the `~/.ssh/id_rsa_thoreau` file,
-
-1. `cd` (to make sure you are in your home directory)
-2. `cd .ssh`
-3. `nano config`
-
-Now put this into that file:
+Here is what goes into the config file,
 
 <pre>
-
-Host thoreau
-HostName thoreau.cs.miami.edu
-User _caneid_
-IdentityFile ~/.ssh/rsa_id_thoreau
-
-
+Host johnston
+HostName johnston.cs.miami.edu
+User _username_
+IdentityFile ~/.ssh/id_rsa
 </pre>
 
-Exit nano with control-X, and confirm to save the changes with Y.
+#### Ssh can copy files too!
 
-Now `ssh thoreau` and you should logon without a password. 
+The `scp` command uses the ssh protocol to copy files. With the config set up this is even easier, 
 
-- You can also `scp thoreau:remote_file local_file` to copy
-files from thoreau to your local machine, 
-- or `scp local_file thoreau:remote_file` to copy files in the other direction.
+- `scp johnston:remote_file local_file`
+- `scp local_file johnston:remote_file`
 
-Do not forget the : else it will think you are referring to a local file, scp is both cp and scp in one program.
+Do not forget the : else it will think you are referring to a local file.
+
+### ProxyJump
+
+The machine thoreau at present is not open to the internet. This is done to avoid opportunities for hackers. 
+You log into johnston, which we have open to the internet, and then have ssh to direct you onwards to thoreau.
+This way, from you point of view it is as if you are logging in directly to thoreau.
+
+This is done with two entries in your conf file.
+
+Host thoreau.via.johnston
+User burt
+Hostname 172.19.0.26
+IdentityFile ~/.ssh/id_rsa_thoreau
+ProxyJump armistead
+
+Host johnston
+User burt
+Hostname johnston.cs.miami.edu
+IdentityFile ~/.ssh/id_rsa_johnston
+
+1. The private key for johnston is id_rsa_johnston, and is on your laptop. 
+2. The matching public key is in .ssh/authorized_keys on johnston.
+3. The private key for johnston is id_rsa_thoreau, and is on your laptop. 
+4. The matching public key is in .ssh/authorized_keys on thoreau.
+5. your ssh thoreau.via.johston
+
+<pre>
+CLIENT                   JOHSTON                                            THOREAU
+id_rsa_johnston          cat id_rsa_johnston >> .ssh/authorized_keys        cat id_rsa_thoreau >> .ssh/authorized_keys
+id_rsa_thoreau
+</pre>
