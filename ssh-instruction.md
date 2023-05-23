@@ -3,7 +3,7 @@
 
 Public key cryptography was announced to the civilian world in 1976 in the paper "New Directions in Cryptography" by Whitfield Diffie and Martin E. Hellman. This was followed on 1977 by the paper
 "A Method for Obtaining Digital Signatures and Public-Key Cryptosystems" by Ron Rivest, Adi Shamir, and Leonard Adleman, which proposed the
-first known public key cryptosystem. I say "known" and "civilian" because it later becaome known that Clifford Cocks, a mathematician working for GCHQ had the idea in 1973, but it remained classified.
+first known public key cryptosystem. I say "known" and "civilian" because it later became known that Clifford Cocks, a mathematician working for GCHQ had the idea in 1973, but it remained classified.
 
 Ordinary crytosystems use a single key for encryption and decryption, and the idea is the two parties somehow share this key in a 
 secure manner. Public key has two keys, one for encryption and the other for decryption. The decryption key is kept secret but
