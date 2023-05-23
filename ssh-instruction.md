@@ -25,7 +25,7 @@ More details can be found in my [ssl tutorial](https://www.cs.miami.edu/home/bur
 
 ### Server authentication
 
-Because you are giving your password over to the server, it is desireable that you trust the server. However, this is nothing 
+Because you are giving your password over to the server, it is desirable that you trust the server. However, this is nothing 
 in this protocol that assures you that the server you believe you are connecting to is the server you are connecting to. 
 It would be better if you already had the public key, from a reliable source, rather than just accepting the public key on 
 faith, given by the server. 
@@ -109,7 +109,7 @@ Here is what goes into the config file,
 Host johnston
 HostName johnston.cs.miami.edu
 User _username_
-IdentityFile ~/.ssh/rsa_id
+IdentityFile ~/.ssh/id_rsa
 </pre>
 
 #### Ssh can copy files too!
