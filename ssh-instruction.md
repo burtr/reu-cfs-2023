@@ -129,16 +129,18 @@ This way, from you point of view it is as if you are logging in directly to thor
 
 This is done with two entries in your conf file.
 
+<pre>
 Host thoreau.via.johnston
 User burt
 Hostname 172.19.0.26
 IdentityFile ~/.ssh/id_rsa_thoreau
-ProxyJump armistead
+ProxyJump johnston
 
 Host johnston
 User burt
 Hostname johnston.cs.miami.edu
 IdentityFile ~/.ssh/id_rsa_johnston
+</pre>
 
 1. The private key for johnston is id_rsa_johnston, and is on your laptop. 
 2. The matching public key is in .ssh/authorized_keys on johnston.
@@ -152,17 +154,3 @@ id_rsa_johnston          cat id_rsa_johnston >> .ssh/authorized_keys        cat 
 id_rsa_thoreau
 </pre>
 
-#### in the config file
-
-<pre>
-Host thoreau.via.johnston
-User burt
-Hostname 172.19.0.26
-IdentityFile ~/.ssh/id_rsa_thoreau
-ProxyJump johston
-
-Host johnston
-User burt
-Hostname johnston.cs.miami.edu
-IdentityFile ~/.ssh/id_rsa_johnston
-</pre>
