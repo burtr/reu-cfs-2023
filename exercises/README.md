@@ -8,5 +8,5 @@ The first set of programs to undertake.
 The programs exercise loop invariants.
 1. [Connected Graph](https://github.com/burtr/reu-cfs/blob/master/reu-cfs-2023/exercises/connected_graph.ipynb).
 Graph algorithm type difficulty.
-1. [Slice programming](https://github.com/burtr/reu-cfs-2023/blob/main/exercises/slice_program.ipynb). 
-The largest interval sum problem, done through all pairs search with a reference to dynamic programming; and a card shuffling game.
+2. [Perfect shuffles](https://github.com/burtr/reu-cfs-2023/blob/main/exercises/perfect-shuffles.ipynb). Exercise in slices and a notable result in mathematics.
+3. [Optimal interval sums](). More practive with slices, and a dynamic programming algorithm.
