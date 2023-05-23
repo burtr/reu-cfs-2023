@@ -49,15 +49,16 @@ This is better in a lot of ways. For us, the most obvious advantage is no more t
 
 ## SSH Step by Step
 
+You will create a public key/private key pair using the program `ssh-keygen`.
+The program will create two files. The first contains the private key and <u>must</u> be kept secret.
+The second file as the same name but with .pub at the end. This is the public key and you will share that with 
+the machine you want to log into.
 
-To help alleiviate the burden of passwords and other troublesome identifiers, as well as to enhance security, public key authentication is preferred
-for ssh. It requires you create a public/private key pair using the command line program `ssh-keygen`. You can use it without parameters.
-It will prompt for the name of the file to create. The default for an RSA key is `id_rsa`. 
+The hidden directory `.ssh` contains keys and an `authorized_keys` file. The `authorized_keys` file is full of
+the .pub keys of legitimate users. If a user has a matching private key for any of those public keys, the login succeeds.
 
-The program will create two files: `id_rsa` and `id_rsa.pub`. The first contains the private key and <u>must</u> be kept secret.
-The .pub file is the public key and you can share that freely. When you want to log into machine X with the `id_rsa` key you copy the 
-__public__ key into .ssh/authorized_keys of host X. Then when you try to log into X, a math dance occurs were X learns you posses
-the private key, with divulging the private key, and then allows the log in.
+The private keys by convention are stores in the `.ssh` directory, and must have read permission _only_ by user. The ssh
+program will not proceed if this security requirement is not met.
 
 <pre>
   CLIENT                     SERVER
@@ -65,7 +66,8 @@ the private key, with divulging the private key, and then allows the log in.
   .ssh/id_rsa                .ssh/authorized_keys
 </pre>
 
-#### Example Johnston
+We have johnston.cs.miami.edu open for ssh to the internet. You can login using your username/password. Here
+are the details of how to log in with a public key.
 
 ##### On johnston
 
