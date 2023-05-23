@@ -78,3 +78,28 @@ files from thoreau to your local machine,
 - or `scp local_file thoreau:remote_file` to copy files in the other direction.
 
 Do not forget the : else it will think you are referring to a local file, scp is both cp and scp in one program.
+
+### Pass through ssh
+
+The machine thoreau at present is not open to the internet. This is done to avoid opportunities for hackers. 
+You log into johnston, which we have open to the internet, and then have ssh to direct you onwards to thoreau.
+This way, from you point of view it is as if you are logging in directly to thoreau.
+
+This is done with two entries in your conf file.
+
+Host thoreau.via.johnston
+User burt
+Hostname 172.19.0.26
+IdentityFile ~/.ssh/id_rsa_thoreau
+ProxyJump armistead
+
+Host johnston
+User burt
+Hostname johnston.cs.miami.edu
+IdentityFile ~/.ssh/id_rsa_johnston
+
+1. The private key for johnston is id_rsa_johnston, and is on your laptop. The matching public key is in .ssh/authorized_keys on johnston.
+2. The private key for johnston is id_rsa_thoreau, and is on your laptop. The matching public key is in .ssh/authorized_keys on thoreau.
+3. your ssh thoreau.via.johston
+
+
