@@ -1,7 +1,5 @@
 ## Public Key Cryptograhy
 
-The ssh protocol assures confidentially by establishing an encrypted channel between your lap and the server
-using public key cryptography. 
 
 Public key cryptography was announced to the civilian world in 1976 in the paper "New Directions in Cryptography" by Whitfield Diffie and Martin E. Hellman. This was followed on 1977 by the paper
 "A Method for Obtaining Digital Signatures and Public-Key Cryptosystems" by Ron Rivest, Adi Shamir, and Leonard Adleman, which proposed the
@@ -11,13 +9,46 @@ Ordinary crytosystems use a single key for encryption and decryption, and the id
 secure manner. Public key has two keys, one for encryption and the other for decryption. The decryption key is kept secret but
 the encryption key is made public. Therefore what is shared is the public key, and it can be done over a public channel.
 
+## SSH
 
-https://www.cs.miami.edu/home/burt/learning/Csc424.162/workbook/ssl-tutorial.html
+Ssh is a terminal communication application that uses the SSL protocol to assure confidentially by using public key cryptography
+to establish an encrypted channel between your lap and the server 
 
-Your Cane ID is your name you received at the Cane ID website. To manage or reset your password, visit https://caneidhelp.miami.edu/caneid/.
+The server has a private key, public key pair.
+- When contacted by the client, it will handover its public key. 
+- The client chooses a random key, encrypts it using the public key and sends it to the server.
+- The server decrypts it. 
+- Sharing a random key, the client and server use it to encrypt their further communication.
+- Inside this encrypted channel, an standard username/password login is performed.
 
-We refer to the password you used to create this account, as the Cane ID password. You have recieved other passwords for other machines,
-such as the lab machines and for Pegasus. 
+More details can be found in my [ssl tutorial](https://www.cs.miami.edu/home/burt/learning/Csc424.162/workbook/ssl-tutorial.html).
+
+### Server authentication
+
+Because you are giving your password over to the server, it is desireable that you trust the server. However, this is nothing 
+in this protocol that assures you that the server you believe you are connecting to is the server you are connecting to. 
+It would be better if you already had the public key, from a reliable source, rather than just accepting the public key on 
+faith, given by the server. 
+
+This is hard problem to solve, and mostly ssh solves it by a method called _key continuity_. What this mean is that when the 
+server presents you its public key, you are warned and asked to accept the risk that the public key is in authentic. If you 
+accept it, the key is memorized, and future connections are compared against the key. If they server key changes, and it is
+a legitimate change, you will have to ask your machine to forget the old public key, and accept a new one.
+
+### User authentication
+
+So far, we have possibly authenticated the server, constructed an encryption channel, and passed our password over that channel.
+But we can do better. We can also use public key cryptography to eleminate password authentication, and replace it with public
+key (user) authentication.
+
+You will create a public key, private key pair. You will share the public key with the server, and keep the private key private.
+The channel established as before, the server will challenge you on your knowledge of the private key by encrypting something
+withe public key, and seeing if you can decrypt it. 
+
+This is better in a lot of ways. For us, the most obvious advantage is no more typing of passwords.
+
+## SSH Step by Step
+
 
 To help alleiviate the burden of passwords and other troublesome identifiers, as well as to enhance security, public key authentication is preferred
 for ssh. It requires you create a public/private key pair using the command line program `ssh-keygen`. You can use it without parameters.
