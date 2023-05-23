@@ -7,16 +7,18 @@ such as the lab machines and for Pegasus.
 
 To help alleiviate the burden of passwords and other troublesome identifiers, as well as to enhance security, public key authentication is preferred
 for ssh. It requires you create a public/private key pair using the command line program `ssh-keygen`. You can use it without parameters.
-It will prompt for the name of the file to create. I suggesst `id_rsa_thoreau`, although this is not critical. 
+It will prompt for the name of the file to create. The default for an RSA key is `id_rsa`. 
 
-The program will create two files: `id_rsa_thoreau` and `id_rsa_thoreau.pub`. The first contains the private key and <u>must</u> be kept secret.
-The .pub file is the public key and you can share that freely. 
+The program will create two files: `id_rsa` and `id_rsa.pub`. The first contains the private key and <u>must</u> be kept secret.
+The .pub file is the public key and you can share that freely. When you want to log into machine X with the `id_rsa` key you copy the 
+__public__ key into .ssh/authorized_keys of host X. Then when you try to log into X, a math dance occurs were X learns you posses
+the private key, with divulging the private key, and then allows the log in.
 
-__public key in a nutshell__
-
-The public key system will be a conversation between the public key holder and 
-the private key holder during which the public key holder becomes convinced that the counter-party  knows the contents of the private key. 
-However, this conversation reveals nothing about the private key to any party, not to an eavesdropper not even to the holder of the public key.
+<pre>
+  CLIENT                     SERVER
+  chmod go-r .ssh/id_rsa     cat id_rsa.pub >> .ssh/authorized_keys 
+  .ssh/id_rsa                .ssh/authorized_keys
+</pre>
 
 __Part 1__
 
