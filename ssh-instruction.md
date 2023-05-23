@@ -79,7 +79,7 @@ files from thoreau to your local machine,
 
 Do not forget the : else it will think you are referring to a local file, scp is both cp and scp in one program.
 
-### Pass through ssh
+### ProxyJump
 
 The machine thoreau at present is not open to the internet. This is done to avoid opportunities for hackers. 
 You log into johnston, which we have open to the internet, and then have ssh to direct you onwards to thoreau.
