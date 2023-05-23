@@ -151,3 +151,18 @@ CLIENT                   JOHSTON                                            THOR
 id_rsa_johnston          cat id_rsa_johnston >> .ssh/authorized_keys        cat id_rsa_thoreau >> .ssh/authorized_keys
 id_rsa_thoreau
 </pre>
+
+#### in the config file
+
+<pre>
+Host thoreau.via.johnston
+User burt
+Hostname 172.19.0.26
+IdentityFile ~/.ssh/id_rsa_thoreau
+ProxyJump armistead
+
+Host johnston
+User burt
+Hostname johnston.cs.miami.edu
+IdentityFile ~/.ssh/id_rsa_johnston
+</pre>
