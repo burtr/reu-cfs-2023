@@ -93,9 +93,11 @@ User burt
 Hostname johnston.cs.miami.edu
 IdentityFile ~/.ssh/id_rsa_johnston
 
-1. The private key for johnston is id_rsa_johnston, and is on your laptop. The matching public key is in .ssh/authorized_keys on johnston.
-2. The private key for johnston is id_rsa_thoreau, and is on your laptop. The matching public key is in .ssh/authorized_keys on thoreau.
-3. your ssh thoreau.via.johston
+1. The private key for johnston is id_rsa_johnston, and is on your laptop. 
+2. The matching public key is in .ssh/authorized_keys on johnston.
+3. The private key for johnston is id_rsa_thoreau, and is on your laptop. 
+4. The matching public key is in .ssh/authorized_keys on thoreau.
+5. your ssh thoreau.via.johston
 
 <pre>
 CLIENT                   JOHSTON                                            THOREAU
