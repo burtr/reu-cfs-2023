@@ -20,66 +20,59 @@ the private key, with divulging the private key, and then allows the log in.
   .ssh/id_rsa                .ssh/authorized_keys
 </pre>
 
-__Part 1__
+#### Example Johnston
 
-My suggestion is that you create the key pair on thoreau, and you must do so in the directory `~/.ssh`.
+##### On johnston
 
-1. logon onto triton. use your cane id and your cane id password
-2. `mkdir .ssh`
+1. ssh to johnston.cs.miami.edu using your userid and password
+2. `mkdir .ssh` # not needed if `~/.ssh` already exists
 3. `cd .ssh`
-4. `ssh-keygen` (at the prompt: `id_rsa_thoreau`, and the pass phrase prompt, just return (no pass phrase), and confirm return)
-5. `cat id_rsa_thoreau >> authorized_keys`
+4. `ssh-keygen -b 4096` 
+5. `cat id_rsa >> authorized_keys`
 6. logout
 
-Now transfer `id_rsa_thoreau` onto you laptop/friendly home machine.
+##### On your machine
 
 1. `cd` (to make sure you are in your home directory)
-2. `mkdir .ssh` (not needed if `~/.ssh` already exists)
+2. `mkdir .ssh` # not needed if `~/.ssh` already exists
 3. `cd .ssh`
-4. `scp _caneid_@thoreau.cs.miami.edu:~/.ssh/id_rsa_thoreau .` (and use your cane id password to authenticate; don't forget the dot at the end of the line)
-5. `chmod go-rw id_rsa_thoreau`
-6. `ssh -i id_rsa_thoreau _caneid_@thoreau.cs.miami.edu`
+4. use `scp` to copy `.ssh/id_rsa` from johnston to your machine
+5. thatis: `scp -username-@johnston.cs.miami.edu:~/.ssh/id_rsa .` # will prompt for your password
+6. `chmod go-rw id_rsa` # ssh will not work if keys are not protected. it's nanny-ware
+7. now log in using the `-i` option to select the private key, 
+8. `ssh -i id_rsa -username-@johnston.cs.miami.edu`
 
-You should have logged in without any password prompts. If this did not happen, fix the situtation.
+You should have logged in without any password prompts.
 
-__Part 2__
+#### The config file
 
 There are three pieces of information in the ssh login line:
 
-1. your cane id
-2. the host name thoreau.ccs.miami.edu
-3. the file name id_rsa_thoreau
+1. your username
+2. the host name johnston.miami.edu
+3. the file name id_rsa
 
-Theses things can be written into the `~/.ssh/config` file and given a single name, thoreau, and then you can
-log into triton with just the command `ssh thoreau`.
+Theses things can be written into the `~/.ssh/config` file and given a single tag, say `johnston`, and 
+then the ssh becomes simply `ssh johnston`. Ssh alwas looks in `~/.ssh/config` for options and adds
+them automatically to your login attempt
 
-On your laptop/friendly machine, where you have the `~/.ssh/id_rsa_thoreau` file,
-
-1. `cd` (to make sure you are in your home directory)
-2. `cd .ssh`
-3. `nano config`
-
-Now put this into that file:
+Here is what goes into the config file,
 
 <pre>
-
-Host thoreau
-HostName thoreau.cs.miami.edu
-User _caneid_
-IdentityFile ~/.ssh/rsa_id_thoreau
-
-
+Host johnston
+HostName johnston.cs.miami.edu
+User _username_
+IdentityFile ~/.ssh/rsa_id
 </pre>
 
-Exit nano with control-X, and confirm to save the changes with Y.
+#### Ssh can copy files too!
 
-Now `ssh thoreau` and you should logon without a password. 
+The `scp` command uses the ssh protocol to copy files. With the config set up this is even easier, 
 
-- You can also `scp thoreau:remote_file local_file` to copy
-files from thoreau to your local machine, 
-- or `scp local_file thoreau:remote_file` to copy files in the other direction.
+- `scp johnston:remote_file local_file`
+- `scp local_file johnston:remote_file`
 
-Do not forget the : else it will think you are referring to a local file, scp is both cp and scp in one program.
+Do not forget the : else it will think you are referring to a local file.
 
 ### ProxyJump
 
@@ -104,4 +97,8 @@ IdentityFile ~/.ssh/id_rsa_johnston
 2. The private key for johnston is id_rsa_thoreau, and is on your laptop. The matching public key is in .ssh/authorized_keys on thoreau.
 3. your ssh thoreau.via.johston
 
-
+<pre>
+CLIENT                   JOHSTON                                            THOREAU
+id_rsa_johnston          cat id_rsa_johnston >> .ssh/authorized_keys        cat id_rsa_thoreau >> .ssh/authorized_keys
+id_rsa_thoreau
+</pre>
