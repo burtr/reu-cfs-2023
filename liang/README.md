@@ -2,5 +2,5 @@
 
 Prof Liang, Computer Science, university of Miami, speaks on python.
 
-Repo: [https://github.com/liangliang/](https://github.com/liangbright/python_lecture)
-
+1. Go to your github root on you platform and clone the repo: `git clone https://github.com/liangbright/python_lecture.git`
+2. `cd python_lecture.git` and `jupyter notebook`
