@@ -18,7 +18,7 @@
 /*
  * bitonic sorting network, iterative
  * author: bjr
- * date: 30 oct 3018
+ * date: 30 oct 2018
  *
  * This code implements the biotonic sorting.
  * Input will be round up to a power of 2.
